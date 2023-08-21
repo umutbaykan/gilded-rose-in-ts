@@ -10,6 +10,10 @@ export class Item {
   }
 }
 
+export interface requiredMethods {
+  update(): void ;
+}
+
 export class GildedRose {
   items: Array<Item>;
 
