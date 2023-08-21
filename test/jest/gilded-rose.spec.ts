@@ -1,6 +1,7 @@
 import { Item, GildedRose } from "@/gilded-rose";
 import AgedBrie from "@/components/aged-brie";
 import Standard from "@/components/standard";
+import Sulfuras from "@/components/sulfuras";
 
 describe("Gilded Rose", () => {
   describe("aged brie", () => {
@@ -69,6 +70,29 @@ describe("Gilded Rose", () => {
       standard.update();
       expect(standard.sellIn).toEqual(0);
       expect(standard.quality).toEqual(0);
+    });
+  });
+
+  describe("sulfuras", () => {
+    test("should be initialized", () => {
+      const sulfuras: Sulfuras = new Sulfuras(15);
+      expect(sulfuras.name).toEqual("Sulfuras, Hand of Ragnaros");
+      expect(sulfuras.sellIn).toEqual(15);
+      expect(sulfuras.quality).toEqual(80);
+    });
+
+    test("loses sellIn value but not quality once updated", () => {
+      const sulfuras: Sulfuras = new Sulfuras(15);
+      sulfuras.update();
+      expect(sulfuras.sellIn).toEqual(14);
+      expect(sulfuras.quality).toEqual(80);
+    });
+
+    test("quality is not altered once item is expired", () => {
+      const sulfuras: Sulfuras = new Sulfuras(0);
+      sulfuras.update();
+      expect(sulfuras.sellIn).toEqual(-1);
+      expect(sulfuras.quality).toEqual(80);
     });
   });
 });
