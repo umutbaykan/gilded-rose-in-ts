@@ -2,6 +2,7 @@ import { Item, GildedRose } from "@/gilded-rose";
 import AgedBrie from "@/components/aged-brie";
 import Standard from "@/components/standard";
 import Sulfuras from "@/components/sulfuras";
+import Conjured from "@/components/conjured";
 
 describe("Gilded Rose", () => {
   describe("aged brie", () => {
@@ -93,6 +94,29 @@ describe("Gilded Rose", () => {
       sulfuras.update();
       expect(sulfuras.sellIn).toEqual(-1);
       expect(sulfuras.quality).toEqual(80);
+    });
+  });
+
+  describe("conjured", () => {
+    test("should be initialized", () => {
+      const conjured: Conjured = new Conjured("Conjured Mana Cake", 3, 6);
+      expect(conjured.name).toEqual("Conjured Mana Cake");
+      expect(conjured.sellIn).toEqual(3);
+      expect(conjured.quality).toEqual(6);
+    });
+
+    test("quality drops by two on a regular day", () => {
+      const conjured: Conjured = new Conjured("Conjured Mana Cake", 3, 6);
+      conjured.update();
+      expect(conjured.sellIn).toEqual(2);
+      expect(conjured.quality).toEqual(4);
+    });
+
+    test("quality drops by four on an expired day", () => {
+      const conjured: Conjured = new Conjured("Conjured Mana Cake", 0, 6);
+      conjured.update();
+      expect(conjured.sellIn).toEqual(-1);
+      expect(conjured.quality).toEqual(2);
     });
   });
 });
