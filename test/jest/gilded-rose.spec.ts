@@ -3,6 +3,7 @@ import AgedBrie from "@/components/aged-brie";
 import Standard from "@/components/standard";
 import Sulfuras from "@/components/sulfuras";
 import Conjured from "@/components/conjured";
+import BackstagePasses from "@/components/backstage";
 
 describe("Gilded Rose", () => {
   describe("aged brie", () => {
@@ -119,4 +120,49 @@ describe("Gilded Rose", () => {
       expect(conjured.quality).toEqual(2);
     });
   });
+
+  describe("backstage passes", () => {
+    test("should be initialized", () => {
+      const backstage: BackstagePasses = new BackstagePasses("Backstage passes to a TAFKAL80ETC concert", 15, 20);
+      expect(backstage.name).toEqual("Backstage passes to a TAFKAL80ETC concert");
+      expect(backstage.sellIn).toEqual(15);
+      expect(backstage.quality).toEqual(20);
+    });
+
+    test("quality increases by one when sellIn > 10", () => {
+      const backstage: BackstagePasses = new BackstagePasses("Backstage passes to a TAFKAL80ETC concert", 15, 20);
+      backstage.update();
+      expect(backstage.sellIn).toEqual(14);
+      expect(backstage.quality).toEqual(21);
+    })
+
+    test("quality increases by two when sellIn < 10", () => {
+      const backstage: BackstagePasses = new BackstagePasses("Backstage passes to a TAFKAL80ETC concert", 9, 48);
+      backstage.update();
+      expect(backstage.sellIn).toEqual(8);
+      expect(backstage.quality).toEqual(50);
+    })
+
+    test("quality increases by three when sellIn < 5", () => {
+      const backstage: BackstagePasses = new BackstagePasses("Backstage passes to a TAFKAL80ETC concert", 4, 10);
+      backstage.update();
+      expect(backstage.sellIn).toEqual(3);
+      expect(backstage.quality).toEqual(13);
+    })
+
+    test("quality drops to 0 if sellIn date has passed", () => {
+      const backstage: BackstagePasses = new BackstagePasses("Backstage passes to a TAFKAL80ETC concert", 0, 10);
+      backstage.update();
+      expect(backstage.sellIn).toEqual(-1);
+      expect(backstage.quality).toEqual(0);
+    })
+
+    test("quality does not go above 50", () => {
+      const backstage: BackstagePasses = new BackstagePasses("Backstage passes to a TAFKAL80ETC concert", 9, 48);
+      backstage.update();
+      backstage.update();
+      expect(backstage.sellIn).toEqual(7);
+      expect(backstage.quality).toEqual(50);
+    })
+  })
 });
